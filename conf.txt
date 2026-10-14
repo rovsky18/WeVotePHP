@@ -1,0 +1,26 @@
+server {
+    listen 80;
+    server_name proyekku.local; # Ubah jadi domain atau IP server Anda
+
+    root /var/www/proyek-php; # Folder tempat menyimpan file PHP Anda
+    index index.php index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # KONFIGURASI UTAMA UNTUK PHP-FPM
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+
+        # SESUAIKAN VERSI PHP (Contoh di bawah memakai PHP 8.2 untuk Debian 12)
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock; 
+
+        # Jika Debian 11 (PHP 7.4), ubah baris di atas menjadi:
+        # fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
